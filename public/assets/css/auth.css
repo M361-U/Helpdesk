@@ -1,0 +1,22 @@
+/* Pages de connexion et d'inscription : une seule page, centrée */
+body.entree { margin: 0; min-height: 100vh; color: var(--texte);
+    background: radial-gradient(1100px 520px at 50% -120px, #1c4a55 0%, rgba(28,74,85,0) 70%), var(--encre); }
+.entree-page { width: 100%; box-sizing: border-box; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2.2rem 1.25rem 2rem; }
+
+.entree-tete { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 1.8rem; }
+.entree .brand { color: #fff; font-size: 1.5rem; }
+.entree .brand span { color: #7cc4ca; }
+.entree-retour { display: inline-flex; align-items: center; gap: .5rem; padding: .5rem 1.15rem; border: 1.5px solid rgba(255,255,255,.65); border-radius: 999px; color: #fff; background: rgba(255,255,255,.07); font: 600 .95rem var(--police); text-decoration: none; transition: background .15s, color .15s; }
+.entree-retour:hover { background: #fff; color: var(--encre); }
+.entree-retour:focus-visible { outline: 3px solid #7cc4ca; outline-offset: 3px; }
+
+.entree .login-card { width: 100%; max-width: 440px; margin: 0 auto; background: #fff; padding: 2.1rem 2rem 1.9rem; border: 0; border-top: 5px solid var(--primaire); border-radius: 14px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
+.entree .login-card-large { max-width: 560px; }
+
+.entree-pied { margin-top: 2rem; text-align: center; max-width: 560px; }
+.entree-pied p { margin: 0 0 1rem; color: #a9c3c7; font-size: .97rem; }
+.entree-pied ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
+.entree-pied li { padding: .35rem .9rem .35rem .8rem; border-left: 4px solid var(--c); border-radius: 0 8px 8px 0; background: var(--encre-2); color: #fff; font-weight: 600; font-size: .92rem; }
+.entree-pied .d-reseau { --c: var(--reseau); } .entree-pied .d-systeme { --c: var(--systeme); } .entree-pied .d-applicatif { --c: var(--applicatif); }
+
+@media (max-width: 520px) { .entree-page { padding-top: 1.5rem; } .entree .login-card { padding: 1.6rem 1.25rem; } }

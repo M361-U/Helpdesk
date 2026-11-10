@@ -1,0 +1,14 @@
+/* Tableau de bord : une couleur par statut, par domaine et par technicien */
+.bars li.st-nouveau .bar-fill     { background: #d6456b; }
+.bars li.st-assigne .bar-fill     { background: #7c5cc4; }
+.bars li.st-en_cours .bar-fill    { background: #0e8fa0; }
+.bars li.st-en_attente .bar-fill  { background: #e0a526; }
+.bars li.st-resolu .bar-fill      { background: #2e9e5b; }
+.bars li.st-cloture .bar-fill     { background: #7b8d93; }
+.bars li.dom-reseau .bar-fill, .bar-inline.dom-reseau .bar-fill { background: #2563c9; }
+.bars li.dom-systeme .bar-fill, .bar-inline.dom-systeme .bar-fill { background: #17855a; }
+.bars li.dom-applicatif .bar-fill, .bar-inline.dom-applicatif .bar-fill { background: #b86a05; }
+.badge-dom-reseau { background: #e5eefb; color: #1a4a9a; }
+.badge-dom-systeme { background: #e0f3ea; color: #11623f; }
+.badge-dom-applicatif { background: #fbefd9; color: #8a4f03; }
+.columns .column-fill { background: #3b6f9e; }
