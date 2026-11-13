@@ -53,6 +53,8 @@ final class Router
             }
         }
 
+        echo '404 : page introuvable<br>Chemin lu : ' . htmlspecialchars($chemin);
+
         http_response_code(404);
         echo '404 : page introuvable';
     }

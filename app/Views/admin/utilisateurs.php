@@ -9,9 +9,19 @@
     <?php foreach ($demandes as $d): ?>
         <div class="demande">
             <div class="demande-infos">
-                <strong><?= e($d['prenom'] . ' ' . $d['nom']) ?> <span class="badge badge-role"><?= e(libelle_role($d['role'])) ?></span></strong>
-                <span class="muted"><?= e($d['email']) ?>
-                    · <?= $d['domaine'] !== null ? 'Domaine ' . e($d['domaine']) : e((string) $d['service']) ?></span>
+                <form method="post" action="<?= e(url('/admin/utilisateurs/' . $d['id'] . '/suppression')) ?>"
+                      class="admin-delete-form"
+                      data-confirmer="Supprimer définitivement le compte de <?= e($d['prenom'] . ' ' . $d['nom']) ?> ?">
+                    <?= csrf_field() ?>
+                    <button type="submit" class="btn btn-poubelle" aria-label="Supprimer le compte de <?= e($d['prenom'] . ' ' . $d['nom']) ?>" title="Supprimer">
+                        <?= icone_poubelle() ?>
+                    </button>
+                </form>
+                <div>
+                    <strong><?= e($d['prenom'] . ' ' . $d['nom']) ?> <span class="badge badge-role"><?= e(libelle_role($d['role'])) ?></span></strong>
+                    <span class="muted"><?= e($d['email']) ?>
+                        · <?= $d['domaine'] !== null ? 'Domaine ' . e($d['domaine']) : e((string) $d['service']) ?></span>
+                </div>
             </div>
             <div class="demande-actions">
                 <form method="post" action="<?= e(url('/admin/utilisateurs/' . $d['id'] . '/validation')) ?>">
@@ -28,14 +38,47 @@
 </section>
 <?php endif; ?>
 
+<?php if (!empty($utilisateurs)): ?>
+<div class="admin-bulk-bar">
+    <label class="admin-select-all">
+        <input type="checkbox" data-selection-tout="utilisateurs">
+        Tout sélectionner (<?= count($utilisateurs) ?> utilisateur<?= count($utilisateurs) > 1 ? 's' : '' ?>)
+    </label>
+    <form id="bulk-utilisateurs" method="post" action="<?= e(url('/admin/utilisateurs/suppression-selection')) ?>"
+          data-confirmer="Supprimer les utilisateurs sélectionnés ? Votre compte, le dernier administrateur actif et les comptes liés à des tickets seront conservés.">
+        <?= csrf_field() ?>
+        <button type="submit" class="btn btn-danger btn-small">Supprimer la sélection</button>
+    </form>
+    <form method="post" action="<?= e(url('/admin/utilisateurs/suppression-tout')) ?>"
+          data-confirmer="Supprimer tous les utilisateurs ? Votre compte, le dernier administrateur actif et les comptes liés à des tickets seront conservés.">
+        <?= csrf_field() ?>
+        <button type="submit" class="btn btn-danger btn-small">Supprimer tous les utilisateurs</button>
+    </form>
+</div>
+<?php endif; ?>
+
 <div class="table-wrap">
     <table class="table">
         <thead>
-            <tr><th>Nom</th><th>E-mail</th><th>Rôle</th><th>Domaine</th><th>Service</th><th>Tickets en cours</th><th>Statut</th><th></th></tr>
+            <tr><th><span class="sr-only">Sélection</span></th><th></th><th>Nom</th><th>E-mail</th><th>Rôle</th><th>Domaine</th><th>Service</th><th>Tickets en cours</th><th>Statut</th><th></th></tr>
         </thead>
         <tbody>
         <?php foreach ($utilisateurs as $u): ?>
             <tr class="<?= (int) $u['actif'] === 1 ? '' : 'ligne-inactive' ?>">
+                <td>
+                    <input type="checkbox" name="ids[]" value="<?= (int) $u['id'] ?>" form="bulk-utilisateurs"
+                           data-selection-item="utilisateurs" aria-label="Sélectionner <?= e($u['prenom'] . ' ' . $u['nom']) ?>">
+                </td>
+                <td>
+                    <form method="post" action="<?= e(url('/admin/utilisateurs/' . $u['id'] . '/suppression')) ?>"
+                          class="admin-delete-form"
+                          data-confirmer="Supprimer définitivement le compte de <?= e($u['prenom'] . ' ' . $u['nom']) ?> ?">
+                        <?= csrf_field() ?>
+                        <button type="submit" class="btn btn-poubelle" aria-label="Supprimer le compte de <?= e($u['prenom'] . ' ' . $u['nom']) ?>" title="Supprimer">
+                            <?= icone_poubelle() ?>
+                        </button>
+                    </form>
+                </td>
                 <td><?= e($u['prenom'] . ' ' . $u['nom']) ?></td>
                 <td><?= e($u['email']) ?></td>
                 <td><?= e($u['role_libelle']) ?></td>

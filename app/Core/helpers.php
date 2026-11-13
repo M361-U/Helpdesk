@@ -43,6 +43,11 @@ function csrf_field(): string
     return '<input type="hidden" name="_csrf" value="' . e(Auth::csrfToken()) . '">';
 }
 
+function icone_poubelle(): string
+{
+    return '<span aria-hidden="true">&#128465;&#65039;</span>';
+}
+
 /** Enregistre un message à afficher à la prochaine page. */
 function flash(string $type, string $message): void
 {

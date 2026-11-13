@@ -66,6 +66,29 @@ final class Audit
         return $requete->fetchAll();
     }
 
+    public static function supprimer(int $id): bool
+    {
+        $requete = Database::getConnection()->prepare('DELETE FROM journal_audit WHERE id = :id');
+        $requete->execute(['id' => $id]);
+        return $requete->rowCount() > 0;
+    }
+
+    public static function supprimerPlusieurs(array $ids): int
+    {
+        $supprimes = 0;
+        foreach (array_unique($ids) as $id) {
+            if (self::supprimer((int) $id)) {
+                $supprimes++;
+            }
+        }
+        return $supprimes;
+    }
+
+    public static function supprimerTout(): int
+    {
+        return Database::getConnection()->exec('DELETE FROM journal_audit');
+    }
+
     /** @return array{0: string, 1: array} clause WHERE et paramètres */
     private static function filtre(string $action, string $recherche): array
     {

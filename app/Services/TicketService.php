@@ -173,10 +173,8 @@ final class TicketService
     }
 
     /**
-     * Qui peut supprimer un ticket ?
-     *  - l'administrateur : tous les tickets ;
-     *  - l'employé : ses propres tickets, tant que personne ne les a pris en charge (statut nouveau ou assigné) ;
-     *  - le technicien : jamais.
+     * L'administrateur peut supprimer tous les tickets ; l'employé peut supprimer
+     * les siens sauf lorsqu'ils sont en cours ; le technicien ne peut pas les supprimer.
      */
     public static function peutSupprimer(array $ticket, array $utilisateur): bool
     {
@@ -185,7 +183,7 @@ final class TicketService
         }
         return $utilisateur['role'] === 'employe'
             && (int) $ticket['demandeur_id'] === $utilisateur['id']
-            && in_array($ticket['statut'], ['nouveau', 'assigne'], true);
+            && $ticket['statut'] !== 'en_cours';
     }
 
     public static function supprimer(int $ticketId, array $utilisateur): void
@@ -193,7 +191,9 @@ final class TicketService
         $ticket = Ticket::trouver($ticketId) ?? throw new DomainException('Ticket introuvable.');
         if (!self::peutSupprimer($ticket, $utilisateur)) {
             throw new DomainException($utilisateur['role'] === 'employe'
-                ? 'Ce ticket est déjà pris en charge : demandez sa suppression à l\'administrateur.'
+                ? ((int) $ticket['demandeur_id'] === $utilisateur['id']
+                    ? 'Un ticket au statut « En cours » ne peut pas être supprimé.'
+                    : 'Vous ne pouvez supprimer que vos propres tickets.')
                 : 'Vous n\'avez pas le droit de supprimer ce ticket.');
         }
 

@@ -127,7 +127,23 @@
         filtrer();
     });
 
-    // ---------- 5. Confirmation avant une action importante (form[data-confirmer]) ----------
+    // ---------- 5. Sélection groupée dans les listes d'administration ----------
+    document.querySelectorAll('input[data-selection-tout]').forEach(function (maitre) {
+        var groupe = maitre.dataset.selectionTout;
+        var cases = Array.prototype.slice.call(document.querySelectorAll('input[data-selection-item]'))
+            .filter(function (caseSelection) { return caseSelection.dataset.selectionItem === groupe; });
+
+        maitre.addEventListener('change', function () {
+            cases.forEach(function (caseSelection) { caseSelection.checked = maitre.checked; });
+        });
+        cases.forEach(function (caseSelection) {
+            caseSelection.addEventListener('change', function () {
+                maitre.checked = cases.length > 0 && cases.every(function (element) { return element.checked; });
+            });
+        });
+    });
+
+    // ---------- 6. Confirmation avant une action importante (form[data-confirmer]) ----------
     document.querySelectorAll('form[data-confirmer]').forEach(function (form) {
         form.addEventListener('submit', function (evenement) {
             if (!window.confirm(form.dataset.confirmer)) {
@@ -136,7 +152,7 @@
         });
     });
 
-    // ---------- 6. Anti double envoi : on désactive le bouton après le premier clic ----------
+    // ---------- 7. Anti double envoi : on désactive le bouton après le premier clic ----------
     document.querySelectorAll('form[method=post]').forEach(function (form) {
         form.addEventListener('submit', function (evenement) {
             if (evenement.defaultPrevented) { return; }
@@ -158,7 +174,7 @@
         });
     });
 
-        // ---------- 6b. Formulaire utilisateur : le domaine ne concerne que les techniciens ----------
+        // ---------- 7b. Formulaire utilisateur : le domaine ne concerne que les techniciens ----------
     document.querySelectorAll('select[data-role-domaine]').forEach(function (liste) {
         var bloc = document.getElementById(liste.dataset.roleDomaine);
         if (!bloc) { return; }
@@ -175,7 +191,7 @@
         maj();
     });
 
-    // ---------- 7. Tableau de bord : actualisation des chiffres (AJAX / fetch) ----------
+    // ---------- 8. Tableau de bord : actualisation des chiffres (AJAX / fetch) ----------
     var zoneMaj = document.querySelector('[data-actualiser]');
     if (zoneMaj && window.fetch) {
         var adresse = zoneMaj.dataset.actualiser;
@@ -206,7 +222,7 @@
         setInterval(actualiser, 30000);
     }
     
-        // ---------- 8. Formulaire d'inscription : champs selon le profil ----------
+        // ---------- 9. Formulaire d'inscription : champs selon le profil ----------
     var formInscription = document.getElementById('form-inscription');
     if (formInscription) {
         var blocs = formInscription.querySelectorAll('[data-profil]');

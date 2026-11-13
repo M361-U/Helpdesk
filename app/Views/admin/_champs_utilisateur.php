@@ -1,5 +1,4 @@
 <?php
-/* Champs communs création / modification. Variable attendue : $v (valeurs), $roles, $domaines. */
 $v = $compte ?? $ancien ?? [];
 ?>
 <div class="field-row">

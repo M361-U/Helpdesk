@@ -20,14 +20,44 @@
 <?php if (!$entrees): ?>
     <div class="empty"><p>Aucune entrée ne correspond.</p></div>
 <?php else: ?>
+<div class="admin-bulk-bar">
+    <label class="admin-select-all">
+        <input type="checkbox" data-selection-tout="audit">
+        Tout sélectionner (<?= count($entrees) ?> affichée<?= count($entrees) > 1 ? 's' : '' ?>)
+    </label>
+    <form id="bulk-audit" method="post" action="<?= e(url('/admin/audit/suppression-selection')) ?>"
+          data-confirmer="Supprimer les entrées sélectionnées ? Cette action est définitive.">
+        <?= csrf_field() ?>
+        <button type="submit" class="btn btn-danger btn-small">Supprimer la sélection</button>
+    </form>
+    <form method="post" action="<?= e(url('/admin/audit/suppression-tout')) ?>"
+          data-confirmer="Supprimer définitivement toutes les entrées du journal ?">
+        <?= csrf_field() ?>
+        <button type="submit" class="btn btn-danger btn-small">Supprimer tout le journal</button>
+    </form>
+</div>
 <div class="table-wrap">
     <table class="table">
         <thead>
-            <tr><th>Date</th><th>Utilisateur</th><th>Action</th><th>Détails</th><th>Adresse IP</th></tr>
+            <tr><th><span class="sr-only">Sélection</span></th><th></th><th>Date</th><th>Utilisateur</th><th>Action</th><th>Détails</th><th>Adresse IP</th></tr>
         </thead>
         <tbody>
         <?php foreach ($entrees as $l): ?>
             <tr>
+                <td>
+                    <input type="checkbox" name="ids[]" value="<?= (int) $l['id'] ?>" form="bulk-audit"
+                           data-selection-item="audit" aria-label="Sélectionner cette entrée du journal">
+                </td>
+                <td>
+                    <form method="post" action="<?= e(url('/admin/audit/' . $l['id'] . '/suppression')) ?>"
+                          class="admin-delete-form"
+                          data-confirmer="Supprimer définitivement cette entrée du journal ?">
+                        <?= csrf_field() ?>
+                        <button type="submit" class="btn btn-poubelle" aria-label="Supprimer cette entrée du journal" title="Supprimer">
+                            <?= icone_poubelle() ?>
+                        </button>
+                    </form>
+                </td>
                 <td><?= e(date('d/m/Y H:i:s', strtotime($l['cree_le']))) ?></td>
                 <td><?= $l['nom'] !== null ? e($l['prenom'] . ' ' . $l['nom']) : '<span class="muted">—</span>' ?></td>
                 <td><span class="badge badge-audit"><?= e(libelle_audit($l['action'])) ?></span></td>

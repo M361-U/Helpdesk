@@ -1,6 +1,6 @@
 <div class="login-card">
     <h1>Connexion</h1>
-    <p class="muted">Saisissez votre e-mail et votre mot de passe : vous arrivez directement sur votre espace (employé, technicien ou administrateur).</p>
+    <p class="muted">Saisissez votre e-mail et votre mot de passe : vous arrivez directement sur votre espace.</p>
 
     <?php foreach (recuperer_flashs() as $f): ?>
         <div class="alert alert-<?= e($f['type']) ?>"><?= e($f['message']) ?></div>

@@ -40,4 +40,27 @@ final class Notification
                      FROM notifications_email ORDER BY id DESC LIMIT $limite")
             ->fetchAll();
     }
+
+    public static function supprimer(int $id): bool
+    {
+        $requete = Database::getConnection()->prepare('DELETE FROM notifications_email WHERE id = :id');
+        $requete->execute(['id' => $id]);
+        return $requete->rowCount() > 0;
+    }
+
+    public static function supprimerPlusieurs(array $ids): int
+    {
+        $supprimes = 0;
+        foreach (array_unique($ids) as $id) {
+            if (self::supprimer((int) $id)) {
+                $supprimes++;
+            }
+        }
+        return $supprimes;
+    }
+
+    public static function supprimerTout(): int
+    {
+        return Database::getConnection()->exec('DELETE FROM notifications_email');
+    }
 }

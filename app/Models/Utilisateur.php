@@ -169,6 +169,22 @@ final class Utilisateur
         return (int) $requete->fetchColumn();
     }
 
+    public static function aDesTickets(int $id): bool
+    {
+        $requete = Database::getConnection()->prepare(
+            'SELECT COUNT(*) FROM tickets WHERE demandeur_id = :demandeur OR technicien_id = :technicien'
+        );
+        $requete->execute(['demandeur' => $id, 'technicien' => $id]);
+        return (int) $requete->fetchColumn() > 0;
+    }
+
+    public static function supprimer(int $id): bool
+    {
+        $requete = Database::getConnection()->prepare('DELETE FROM utilisateurs WHERE id = :id');
+        $requete->execute(['id' => $id]);
+        return $requete->rowCount() > 0;
+    }
+
      public static function trouverParEmailTous(string $email): ?array
     {
         $requete = Database::getConnection()->prepare(

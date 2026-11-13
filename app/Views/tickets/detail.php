@@ -148,7 +148,7 @@ $base = '/tickets/' . $ticket['id'];
         <?php if (\App\Core\Auth::utilisateur()['role'] === 'admin'): ?>
             Supprime définitivement le ticket, ses commentaires, son historique et ses pièces jointes. L'action est enregistrée dans le journal.
         <?php else: ?>
-            Ce ticket n'a pas encore été traité : vous pouvez le supprimer s'il a été envoyé par erreur. Cette action est définitive.
+            Vous pouvez supprimer votre ticket, sauf s'il est « En cours ». Cette action est définitive.
         <?php endif; ?>
     </p>
     <form method="post" action="<?= e(url($base . '/suppression')) ?>"
